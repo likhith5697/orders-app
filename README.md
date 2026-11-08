@@ -9,6 +9,7 @@ A small FastAPI service that keeps orders in memory. Restarting it clears all or
 | POST | `/orders` | Create an order, e.g. `{"item": "book", "quantity": 2}` → 201 |
 | GET | `/orders/{id}` | Get one order (404 if it doesn't exist) |
 | GET | `/orders` | List all orders |
+| DELETE | `/orders/{id}` | Delete one order → 204 (404 if it doesn't exist) |
 | GET | `/healthz` | Liveness check → `{"status": "ok"}` |
 | GET | `/version` | Running version, taken from the `APP_VERSION` env var |
 

@@ -2,7 +2,7 @@ import os
 from itertools import count
 from threading import Lock
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
 from pydantic import BaseModel, Field
 
 VERSION = os.getenv("APP_VERSION", "0.1.0")
@@ -44,6 +44,14 @@ def get_order(order_id: int) -> Order:
 @app.get("/orders", response_model=list[Order])
 def list_orders() -> list[Order]:
     return list(_orders.values())
+
+
+@app.delete("/orders/{order_id}", status_code=204)
+def delete_order(order_id: int) -> Response:
+    with _lock:
+        if _orders.pop(order_id, None) is None:
+            raise HTTPException(status_code=404, detail="order not found")
+    return Response(status_code=204)
 
 
 @app.get("/healthz")
